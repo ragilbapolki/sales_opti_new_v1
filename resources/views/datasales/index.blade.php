@@ -197,7 +197,10 @@
     <script>
         $(document).ready(function() {
             $('.datasales').addClass('active');
-            
+            $('#modal-editsales').modal({backdrop: 'static', keyboard: false})  
+            $(".batal").click(function(){
+                $('#modal-editsales').modal('hide');
+            })
             $('.form-control').bind("cut copy paste", function(e) {
                 e.preventDefault();
                 alert("Maaf, Mohon isi data dengan diketik");
@@ -267,7 +270,7 @@
                         "targets": 0,
                         "width": "15%",
                         "data": null,
-                        "defaultContent": '<button class="btn btn-danger btn-xs delsales" ><i class="bi bi-trash"></i></button> <button class="btn btn-primary btn-xs editsales" ><i class="bi bi-pencil-square"></i> </button>'
+                        "defaultContent": `<button class="btn btn-danger btn-xs delsales" ><i class="bi bi-trash"></i></button> <button class="btn btn-primary btn-xs editsales" ><i class="bi bi-pencil-square"></i> </button>`
                     }
                 ]
             });
@@ -276,11 +279,53 @@
             table.on('click', '.delsales', function() {
                 $tr = $(this).closest('tr');
                 var data = table.row($tr).data();
-                $('#modal-hpssales').modal('show');
-                $('#hapusid').html(data.id);
-                $('#hapuscabang').html(data.kode_cabang);
-                $('#hapusnama').html(data.name);
-                document.getElementById('recid').value = data.id;
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const response = fetch(
+                            "{{ route('sales.delete') }}", {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                'body': JSON.stringify({
+                                    '_token': "{{ csrf_token() }}",
+                                    'id': data.id,
+                                })
+                            }).then(response => response.json()).then(data => {
+                            if (data.status == 'success') {
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Your file has been deleted.',
+                                    'success'
+                                ).then((result) => {
+                                    if (result.isConfirmed) {
+                                        table.ajax.reload();
+                                    }
+                                })
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    'Your file failed to delete.',
+                                    'error'
+                                )
+                            }
+                        })
+
+                    }
+                })
+                // $('#modal-hpssales').modal('show');
+                // $('#hapusid').html(data.id);
+                // $('#hapuscabang').html(data.kode_cabang);
+                // $('#hapusnama').html(data.name);
+                // document.getElementById('recid').value = data.id;
             });
             table.on('click', '.editsales', function() {
                 $tr = $(this).closest('tr');
@@ -291,41 +336,32 @@
                 $("#editusername").val(data.username)
                 $("#editjabatan").val(data.jabatan_id)
                 $("#edithp").val(data.hp)
-                $("#editpassword").val('')
-                $("#editpassword_confirmation").val('')
+                $("#editjabatan").select2({
+                    placeholder: 'Select Item',
+                    width: '100%',
+                    dropdownParent: $('#modal-editsales .modal-content')
+                }).val(data.jabatan_id).trigger('change');
             });
 
-            
-            $('#btn_editsales').on('click', function(event) {
-                var isvalidate = $("#formEditStatus")[0].checkValidity();
-                if (isvalidate) {
-                    event.preventDefault();
-                    var username = $("#editusername").val();
-                    var jabatan = $("#editjabatan").val();
-                    var hp = $("#edithp").val();
-                    var password = $("#editpassword").val();
-                    var password_confirmation = $("#editpassword_confirmation").val();
-                    $.ajax({
-                        type: 'POST',
-                        url: '{{ route('editpasswordsales') }}',
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            username,
-                            jabatan,
-                            hp,
-                            password,
-                            password_confirmation
-                        },
-                        cache: false,
-                        success: function(response) {
-                            console.log(response);
+            $('#btn_editsales').on('click', function(e) {
+                e.preventDefault();
+                var dataForm = $("#formEditSales").serialize()
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('sales.updateSales') }}",
+                    data: dataForm,
+                    cache: false,
+                    success: function(response) {
+                        console.log(response);
+                        if (response.status == 200) {
                             $('#modal-editsales').modal('hide');
-                            // alert('Edit Password Berhasil');
                             $('#datasales').DataTable().ajax.reload();
-                            $('#modal-berhasiledit').modal('show');
-                        },
-                    });
-                }
+                            toastr.success('Data has been saved', 'Success');
+                        } else {
+                            toastr.error('Data failed to save','Error');
+                        }
+                    },
+                });
             });
         });
     </script>

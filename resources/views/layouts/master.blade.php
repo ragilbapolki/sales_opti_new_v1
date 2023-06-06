@@ -246,8 +246,6 @@
 {{--  --}}
 
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<!-- Toastr -->
-<script src="{{ URL::asset('plugins/toastr/toastr.min.js') }}"></script>
 <!-- sweetalert2 -->
 <script src="{{ URL::asset('plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
 <!-- validate -->
@@ -275,7 +273,8 @@
    <!-- AdminLTE App -->
    <script src="{{ URL::asset('dist/js/adminlte.min.js') }}"></script>
    <script src="{{ URL::asset('plugins/handlebars.js') }}"></script>
-
+    <!-- Toastr -->
+    <script src="{{ URL::asset('plugins/toastr/toastr.min.js') }}"></script>
 </body>
 @yield('page-script')
 

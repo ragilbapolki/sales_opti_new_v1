@@ -63,13 +63,10 @@ Route::group([
 ], function () {
 	Route::get('/', 'Sales\KatoController@sales');
     Route::post('/dataSales', 'Sales\KatoController@dataSales')->name('.dataSales');
-    Route::post('save', [AreaController::class, 'store'])->name('.save');
-    Route::post('delete', [AreaController::class, 'delete'])->name('.delete');
-    Route::POST('edit', [AreaController::class, 'edit'])->name('.edit');
+	Route::post('/updateSales', 'Sales\KatoController@updateSales')->name('.updateSales');
+	Route::post('/delete', 'Sales\KatoController@destroy')->name('.delete');
 });
 
-Route::post('/sales/editpasswordsales', 'KatoController@editpasswordsales')->name('editpasswordsales');
-// Route::get('/SearchSales', 'HomeController@notfound');
 Route::delete('/sales/{id}', 'KatoController@destroy');
 Route::put('/sales/{id}', 'KatoController@update');
 Route::get('/registersales', 'HomeController@notfound');

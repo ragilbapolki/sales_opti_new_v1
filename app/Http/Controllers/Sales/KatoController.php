@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers\Sales;
 
-use App\User; //model tabel users
-use App\Http\Controllers\Controller;
-use App\jabatan; //model tabel users
-use App\Item; //model tabel items
-use App\Target; //model tabel targets
-use App\Log; //model tabel logs
 use Session; // untuk session log
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Response;
 use Validator; // validator
-
-use Illuminate\Support\Facades\Auth; //untuk session auth
+use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables; // untuk datatables
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth; //untuk session auth
+use App\{User, jabatan, Item, Target, Log}; //model tabel users
 
 class KatoController extends Controller
 {
@@ -37,8 +33,7 @@ class KatoController extends Controller
 	public function dataSales()
 	{
 		$cabang = Auth::user()->kode_cabang;
-		$users2 = DB::table('users')
-			->select('users.id', 'users.name', 'users.username', 'users.hp', 'users.password', 'users.kode_cabang', 'jabatan_id', 'jabatans.name as jabatan')
+		$users2 = User::select('users.id', 'users.name', 'users.username', 'users.hp', 'users.password', 'users.kode_cabang', 'jabatan_id', 'jabatans.name as jabatan')
 			->where('role_id', '3')
 			->where('kode_cabang', $cabang)
 			->where('active', '1')
@@ -56,29 +51,25 @@ class KatoController extends Controller
 			->make(true);
 	}
 
-	public function destroy($id)
+	public function destroy(Request $request)
 	{
-		$user = User::find($id);
-
-		$name = $user->username;
-		$iduser = Auth::user()->id;
-		$device = Session::get('device');
-		$client_ip = Session::get('client_ip');
-
-		if ($user) {
+		$user = User::find($request->id);
+		DB::beginTransaction();
+		try {
 			$user->delete();
 			$log = new Log;
-			$log->user_id = $iduser;
+			$log->user_id = Auth::user()->id;
 			$log->kode_cabang = Auth::user()->kode_cabang;
-			$log->aktivitas = 'Delete Sales ' . $id . ' - ' . $name;
-			$log->device = $device;
-			$log->ip = $client_ip;
+			$log->aktivitas = 'Update hp ' . $user->name . ' - ' . $user->id;
+			$log->device = empty(Session::get('device')) ? '' : Session::get('device');
+			$log->ip = empty(Session::get('client_ip')) ? '' : Session::get('client_ip');
 			$log->save();
-		} else {
-			abort(404);
+			DB::commit();
+		} catch (\Exception $e) {
+			DB::rollback();
+			return Response::json(['errors' => $e->getMessage(), 'status' => 500]);
 		}
-
-		return redirect('sales');
+		return Response::json(['status' => 'success']);
 	}
 	//untuk menghapus sales
 	public function update($id)
@@ -105,55 +96,30 @@ class KatoController extends Controller
 			abort(404);
 		}
 	}
-	public function editpasswordsales(Request $request)
+	public function updateSales(Request $request)
 	{
-		$this->validate($request, [
-			'password' => 'nullable|string|min:5|confirmed',
-			'jabatan' => 'required',
-		]);
-		if ($request->password == null) {
-			$username = $request->username;
-			$user = User::where('username', $username)->first();
-			$user->jabatan_id = $request->jabatan;
-			$user->hp = $request->hp;
-			$user->google_contact = 0;
+		$user = User::where('username', $request->editusername)->first();
+		$user->jabatan_id = $request->editjabatan;
+		$user->hp = $request->edithp;
+		$user->google_contact = 0;
+		
+		DB::beginTransaction();
+		try {
 			$user->save();
-
 			$iduser = Auth::user()->id;
-			$device = Session::get('device');
-			$client_ip = Session::get('client_ip');
 			$log = new Log;
 			$log->user_id = $iduser;
 			$log->kode_cabang = Auth::user()->kode_cabang;
 			$log->aktivitas = 'Update hp ' . $user->name . ' - ' . $user->id;
-			$log->device = $device;
-			$log->ip = $client_ip;
+			$log->device = empty(Session::get('device')) ? '' : Session::get('device');
+			$log->ip = empty(Session::get('client_ip')) ? '' : Session::get('client_ip');
 			$log->save();
-
-			print    "{\"status\": \"jabatan\" }";
-		} else {
-			$password = bcrypt($request->password);
-			$username = $request->username;
-			$user = User::where('username', $username)->first();
-			$user->jabatan_id = $request->jabatan;
-			$user->hp = $request->hp;
-			$user->google_contact = 0;
-			$user->password = $password;
-			$user->jabatan_id = $request->jabatan;
-			$user->save();
-
-			$iduser = Auth::user()->id;
-			$device = Session::get('device');
-			$client_ip = Session::get('client_ip');
-			$log = new Log;
-			$log->user_id = $iduser;
-			$log->kode_cabang = Auth::user()->kode_cabang;
-			$log->aktivitas = 'Update password ' . $user->name . ' - ' . $user->id;
-			$log->device = $device;
-			$log->ip = $client_ip;
-			$log->save();
-			print    "{\"status\": \"success\" }";
+			DB::commit();
+		} catch (\Exception $e) {
+			DB::rollback();
+			return Response::json(['errors' => $e->getMessage(), 'status' => 500]);
 		}
+		return Response::json(['success' => 'Data has been saved.','status' => 200]);
 	}
 	public function registersales(Request $request)
 	{
