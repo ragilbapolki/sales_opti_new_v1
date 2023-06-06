@@ -34,6 +34,7 @@
                                 <!-- </div> -->
                             </div>
                         </div>
+                        <br>
                         {{-- <div class="row">
                             <div class="col-sm-5 col-sm-push-7">
                                 <div class="box box-primary">
@@ -197,7 +198,7 @@
     <script>
         $(document).ready(function() {
             $('.datasales').addClass('active');
-            
+
             $('.form-control').bind("cut copy paste", function(e) {
                 e.preventDefault();
                 alert("Maaf, Mohon isi data dengan diketik");
@@ -295,7 +296,7 @@
                 $("#editpassword_confirmation").val('')
             });
 
-            
+
             $('#btn_editsales').on('click', function(event) {
                 var isvalidate = $("#formEditStatus")[0].checkValidity();
                 if (isvalidate) {
@@ -328,5 +329,24 @@
                 }
             });
         });
+    </script>
+
+      <script>
+               $("#closeBtn").on("click", function() {
+  $("#modal-berhasiledit").modal('hide');
+});
+
+$("#batalBtn").on("click", function() {
+  $("#modal-editsales").modal('hide');
+});
+
+$("#batalBtn").on("click", function() {
+  $("#modal-hpssales").modal('hide');
+});
+
+$(".close").on("click", function() {
+  $("#modal-hpssales").modal('hide');
+});
+
     </script>
 @stop

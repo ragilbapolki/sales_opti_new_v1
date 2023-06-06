@@ -15,12 +15,26 @@
 			</div>
 			<div class="modal-footer">
 				<input type="hidden" id='recid'>
-				<button type="button" class="btn btn-purple btn-outline" id="hpsstoremanager">Ok,fine&hellip;</button>
-				<button type="button" class="btn bg-maroon btn-outline pull-left" data-dismiss="modal">Batal</button>
+				<button type="button" class="btn btn-outline-primary" id="hpsstoremanager">Ok,fine&hellip;</button>
+				<button type="button" class="btn btn-outline-danger pull-left" id="batalBtn" data-dismiss="modal">Batal</button>
 			</div>
 		</div>
 	</div>
 </div>
+
+{{-- <div class="modal alert alert-danger alert-dismissible fade" role="alert" id="modal-hpssales">
+    <h4 class="alert-heading">Danger Heading</h4>
+    <p>Et suscipit deserunt earum itaque dignissimos recusandae dolorem qui. Molestiae rerum perferendis laborum. Occaecati illo at laboriosam rem molestiae sint.</p>
+    <hr>
+    <p class="mb-0">Temporibus quis et qui aspernatur laboriosam sit eveniet qui sunt.</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+    <div class="modal-footer">
+        <input type="hidden" id='recid'>
+        <button type="button" class="btn btn-outline-primary" id="hpsstoremanager">Ok,fine&hellip;</button>
+        <button type="button" class="btn btn-outline-danger pull-left" id="batalBtn" data-dismiss="modal">Batal</button>
+    </div>
+  </div> --}}
 
 <!-- ///// modal edit Sales -->
 <div class="modal modal-default fade" id="modal-editsales" data-backdrop="static" data-keyboard="false">
@@ -85,10 +99,10 @@
 				</div>
 			</div>
 			</div>
-			<div class="modal-footer">
-				<button type="submit" class="btn btn-primary" id="btn_editsales">Ok,fine&hellip;</button>
-				<button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Batal</button>
-			</div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-outline-primary" id="btn_editsales">Ok,fine&hellip;</button>
+                <button type="button" class="btn btn-outline-danger pull-left" id="batalBtn" data-dismiss="modal">Batal</button>
+              </div>
 			</form>
 		</div>
 	</div>
@@ -96,14 +110,14 @@
 
 <!-- modal Sukses -->
 <div class="modal modal-info fade" id="modal-berhasiledit">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-body">
-				Update Data Berhasil.
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-outline col-sm-2 col-sm-offset-5" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                Update Data Berhasil.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" id="closeBtn" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
