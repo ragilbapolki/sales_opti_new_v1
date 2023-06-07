@@ -34,6 +34,7 @@
                                 <!-- </div> -->
                             </div>
                         </div>
+                        <br>
                         {{-- <div class="row">
                             <div class="col-sm-5 col-sm-push-7">
                                 <div class="box box-primary">
@@ -197,10 +198,14 @@
     <script>
         $(document).ready(function() {
             $('.datasales').addClass('active');
+<<<<<<< HEAD
+
+=======
             $('#modal-editsales').modal({backdrop: 'static', keyboard: false})  
             $(".batal").click(function(){
                 $('#modal-editsales').modal('hide');
             })
+>>>>>>> 92bc7915d37b5684793e00835b50c46265d1774f
             $('.form-control').bind("cut copy paste", function(e) {
                 e.preventDefault();
                 alert("Maaf, Mohon isi data dengan diketik");
@@ -343,6 +348,32 @@
                 }).val(data.jabatan_id).trigger('change');
             });
 
+<<<<<<< HEAD
+
+            $('#btn_editsales').on('click', function(event) {
+                var isvalidate = $("#formEditStatus")[0].checkValidity();
+                if (isvalidate) {
+                    event.preventDefault();
+                    var username = $("#editusername").val();
+                    var jabatan = $("#editjabatan").val();
+                    var hp = $("#edithp").val();
+                    var password = $("#editpassword").val();
+                    var password_confirmation = $("#editpassword_confirmation").val();
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ route('editpasswordsales') }}',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            username,
+                            jabatan,
+                            hp,
+                            password,
+                            password_confirmation
+                        },
+                        cache: false,
+                        success: function(response) {
+                            console.log(response);
+=======
             $('#btn_editsales').on('click', function(e) {
                 e.preventDefault();
                 var dataForm = $("#formEditSales").serialize()
@@ -354,6 +385,7 @@
                     success: function(response) {
                         console.log(response);
                         if (response.status == 200) {
+>>>>>>> 92bc7915d37b5684793e00835b50c46265d1774f
                             $('#modal-editsales').modal('hide');
                             $('#datasales').DataTable().ajax.reload();
                             toastr.success('Data has been saved', 'Success');
@@ -364,5 +396,24 @@
                 });
             });
         });
+    </script>
+
+      <script>
+               $("#closeBtn").on("click", function() {
+  $("#modal-berhasiledit").modal('hide');
+});
+
+$("#batalBtn").on("click", function() {
+  $("#modal-editsales").modal('hide');
+});
+
+$("#batalBtn").on("click", function() {
+  $("#modal-hpssales").modal('hide');
+});
+
+$(".close").on("click", function() {
+  $("#modal-hpssales").modal('hide');
+});
+
     </script>
 @stop
