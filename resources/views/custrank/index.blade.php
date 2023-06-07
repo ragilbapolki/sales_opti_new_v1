@@ -73,17 +73,6 @@
                                                     <th>Total Belanja</th>
                                                 </tr>
                                             </thead>
-                                            <tfoot>
-                                                <tr>
-                                                    <th>Cabang</th>
-                                                    <th>Level</th>
-                                                    <th>Titel</th>
-                                                    <th>Nama</th>
-                                                    <th>Alamat</th>
-                                                    <th>Jml Nota</th>
-                                                    <th>Total Belanja</th>
-                                                </tr>
-                                            </tfoot>
                                         </table>
                                     </div>
                                 </div>
@@ -113,11 +102,6 @@
     <script>
         $(document).ready(function() {
             var tahun = document.getElementById("tahun").value;
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
             var table = $('#custrank').DataTable({
                 scrollY: "533px",
                 scrollX: true,
@@ -130,13 +114,8 @@
                 fixedColumns: {
                     leftColumns: 1
                 },
-                // responsive: true,
-                //         searching: false,
-                //         paging: false,
                 bInfo: false,
-                //         bLengthChange: false,
                 select: true,
-                // lengthMenu: [[10, 50, 99, 3000], [10, 50, 99, 3000]]
                 order: [
                     [6, 'desc']
                 ],
@@ -147,7 +126,8 @@
                 ajax: {
                     url: '{{ route('tabel_show_custrank') }}',
                     data: {
-                        tahun: tahun
+                        '_token': "{{ csrf_token() }}",
+                        tahun: tahun,
                     },
                     method: 'POST'
                 },

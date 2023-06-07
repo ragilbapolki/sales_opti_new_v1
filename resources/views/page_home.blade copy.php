@@ -82,7 +82,7 @@
             <a class="btn btn-app bg-red" href="{{ route('page_target') }}" target="_self">
                 <i class="fa fa-users"></i> Target Pres.
             </a>
-            <a class="btn btn-app bg-yellow" href="{!! route('DataSales') !!}" target="_self">
+            <a class="btn btn-app bg-yellow" href="{!! route('sales.DataSales') !!}" target="_self">
                 <i class="fa fa-user"></i> Data Sales
             </a>
             <a class="btn btn-app bg-aqua" href="{{ route('page_materiproduk') }}" target="_self">

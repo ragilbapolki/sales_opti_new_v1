@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ErStrPenjualan;
 use Illuminate\Http\Request;
-use App\Customer; //model tabel Customers
-use App\User; //model tabel users
-use App\Plan; //model tabel users
-use App\Cekout; //model tabel users
+use App\{Customer, User, Plan, Cekout}; //model tabel Customers
 use App\WebsalesTmpTransaksi; //model tabel logs
-
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth; //untuk session auth
 use Yajra\Datatables\Datatables; // untuk datatables
@@ -200,33 +197,41 @@ class CustomerController extends Controller
 
     public function tabel_show_custrank(Request $request)
     {
+      
       $cabang = Auth::user()->kode_cabang;
-      $tahun = $request->tahun;
-      // print    "{\"data\":[] }"; //output json andro
-      // 
-      $skac = new KoneksiController;
-      $koneksi= $skac -> KoneksiDC();
-      $kueri= "SELECT b.update_cabang,b.ccc_level,b.titel,b.name,b.alamat,SUM(a.total) AS totalbelanja,COUNT(a.nota) AS totalnota 
-      FROM webapp.sales_nota_".$tahun." a,webapp.customers b 
-      WHERE a.customer_id=b.id AND a.nota LIKE '".$cabang.".%' GROUP BY a.customer_id ";
-      $result=$koneksi -> query($kueri);
-      $count = $result->num_rows;
-      if ($count>0) {
-        while ($row=$result->fetch_object()) {
-          $response[]=(object) array(
-            "cabang" => $row->update_cabang,
-            "ccc_level" => $row->ccc_level,
-            "titel" => $row->titel,
-            "name" => $row->name,
-            "alamat" => $row->alamat,
-            "totalnota" => $row->totalnota,
-            "totalbelanja" => $row->totalbelanja,
-            );
-        }$result->close();
-      } else {
-        $response = [ ];
-      }
-      return Datatables::of($response)->make(true);
+      $users2 = DB::raw('')
+      ->toSql();
+      print_r($users2);exit;
+      return Datatables::of($users2)
+        ->removeColumn('password')
+        ->make(true);
+      // $cabang = Auth::user()->kode_cabang;
+      // $tahun = $request->tahun;
+      // // print    "{\"data\":[] }"; //output json andro
+      // // 
+      // $skac = new KoneksiController;
+      // $koneksi= $skac -> KoneksiDC();
+      // $kueri= "SELECT b.update_cabang,b.ccc_level,b.titel,b.name,b.alamat,SUM(a.total) AS totalbelanja,COUNT(a.nota) AS totalnota 
+      // FROM webapp.sales_nota_".$tahun." a,webapp.customers b 
+      // WHERE a.customer_id=b.id AND a.nota LIKE '".$cabang.".%' GROUP BY a.customer_id ";
+      // $result=$koneksi -> query($kueri);
+      // $count = $result->num_rows;
+      // if ($count>0) {
+      //   while ($row=$result->fetch_object()) {
+      //     $response[]=(object) array(
+      //       "cabang" => $row->update_cabang,
+      //       "ccc_level" => $row->ccc_level,
+      //       "titel" => $row->titel,
+      //       "name" => $row->name,
+      //       "alamat" => $row->alamat,
+      //       "totalnota" => $row->totalnota,
+      //       "totalbelanja" => $row->totalbelanja,
+      //       );
+      //   }$result->close();
+      // } else {
+      //   $response = [ ];
+      // }
+      // return Datatables::of($response)->make(true);
     }
 
 

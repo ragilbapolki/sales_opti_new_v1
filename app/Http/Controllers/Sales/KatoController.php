@@ -31,24 +31,17 @@ class KatoController extends Controller
 	}
 
 	public function dataSales()
-	{
-		$cabang = Auth::user()->kode_cabang;
-		$users2 = User::select('users.id', 'users.name', 'users.username', 'users.hp', 'users.password', 'users.kode_cabang', 'jabatan_id', 'jabatans.name as jabatan')
-			->where('role_id', '3')
-			->where('kode_cabang', $cabang)
-			->where('active', '1')
-			->leftjoin('jabatans', 'users.jabatan_id', '=', 'jabatans.id')
-			->get();
-
-		// $users = User::select(['id', 'name','username','hp', 'password', 'kode_cabang','jabatan_id'])
-		// ->where('role_id','3')
-		// ->where('kode_cabang',$cabang)
-		// ->where('active','1')
-		// ->with('jabatan:id,name');
-
-		return Datatables::of($users2)
-			->removeColumn('password')
-			->make(true);
+{
+	$cabang = Auth::user()->kode_cabang;
+	$users2 = User::select('users.id', 'users.name', 'users.username', 'users.hp', 'users.password', 'users.kode_cabang', 'jabatan_id', 'jabatans.name as jabatan')
+		->where('role_id', '3')
+		->where('kode_cabang', $cabang)
+		->where('active', '1')
+		->leftjoin('jabatans', 'users.jabatan_id', '=', 'jabatans.id')
+		->get();
+	return Datatables::of($users2)
+		->removeColumn('password')
+		->make(true);
 	}
 
 	public function destroy(Request $request)

@@ -60,7 +60,7 @@
         </li><!-- End Dashboard Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{{ route('DataSales') }}">
+            <a class="nav-link collapsed" href="{{ route('sales') }}">
                 <i class="bi bi-person"></i>
                 <span>Data Sales</span>
             </a>
