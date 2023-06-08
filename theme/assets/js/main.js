@@ -9,7 +9,6 @@ let menu, animate;
 (function () {
   // Initialize menu
   //-----------------
-
   let layoutMenuEl = document.querySelectorAll('#layout-menu');
   layoutMenuEl.forEach(function (element) {
     menu = new Menu(element, {
@@ -20,7 +19,6 @@ let menu, animate;
     window.Helpers.scrollToActive((animate = false));
     window.Helpers.mainMenu = menu;
   });
-
   // Initialize menu togglers and bind click on each
   let menuToggler = document.querySelectorAll('.layout-menu-toggle');
   menuToggler.forEach(item => {
@@ -29,7 +27,6 @@ let menu, animate;
       window.Helpers.toggleCollapsed();
     });
   });
-
   // Display menu toggle (layout-menu-toggle) on hover with delay
   let delay = function (elem, callback) {
     let timeout = null;
@@ -56,7 +53,6 @@ let menu, animate;
       }
     });
   }
-
   // Display in main menu when menu scrolls
   let menuInnerContainer = document.getElementsByClassName('menu-inner'),
     menuInnerShadow = document.getElementsByClassName('menu-inner-shadow')[0];

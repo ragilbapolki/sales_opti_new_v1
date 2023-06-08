@@ -64,13 +64,13 @@
                                         <table id="custrank" class="display nowrap compact" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
+                                                    <th>No Nota</th>
                                                     <th>Cabang</th>
-                                                    <th>Level</th>
-                                                    <th>Titel</th>
-                                                    <th>Nama</th>
-                                                    <th>Alamat</th>
-                                                    <th>Jml Nota</th>
-                                                    <th>Total Belanja</th>
+                                                    <th>Customer</th>
+                                                    <th>Produk</th>
+                                                    <th>Quantity</th>
+                                                    <th>Diskon</th>
+                                                    <th>Subtotal</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -106,7 +106,7 @@
                 scrollY: "533px",
                 scrollX: true,
                 scrollCollapse: true,
-                paging: false,
+                // paging: false,
                 columnDefs: [{
                     width: '20%',
                     targets: 0
@@ -114,7 +114,7 @@
                 fixedColumns: {
                     leftColumns: 1
                 },
-                bInfo: false,
+                // bInfo: false,
                 select: true,
                 order: [
                     [6, 'desc']
@@ -132,33 +132,33 @@
                     method: 'POST'
                 },
                 columns: [{
-                        data: 'cabang',
-                        name: 'cabang'
+                        data: 'no_nota',
+                        name: 'no_nota'
                     },
                     {
-                        data: 'ccc_level',
-                        name: 'ccc_level'
+                        data: 'nama_perusahaan',
+                        name: 'nama_perusahaan'
                     },
                     {
-                        data: 'titel',
-                        name: 'titel'
+                        data: 'nama_member',
+                        name: 'nama_member'
                     },
                     {
-                        data: 'name',
-                        name: 'name'
+                        data: 'deskripsi',
+                        name: 'deskripsi'
                     },
                     {
-                        data: 'alamat',
-                        name: 'alamat'
+                        data: 'qty',
+                        name: 'qty'
                     },
                     {
-                        data: 'totalnota',
-                        name: 'totalnota',
+                        data: 'diskon',
+                        name: 'diskon',
                         "sClass": "text-right"
                     },
                     {
-                        data: 'totalbelanja',
-                        name: 'totalbelanja',
+                        data: 'subtotal',
+                        name: 'subtotal',
                         "render": $.fn.dataTable.render.number('.', ',', 0),
                         "sClass": "text-right"
                     }

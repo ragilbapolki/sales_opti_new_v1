@@ -197,41 +197,51 @@ class CustomerController extends Controller
 
     public function tabel_show_custrank(Request $request)
     {
-      
       $cabang = Auth::user()->kode_cabang;
-      $users2 = DB::raw('')
-      ->toSql();
-      print_r($users2);exit;
-      return Datatables::of($users2)
-        ->removeColumn('password')
-        ->make(true);
-      // $cabang = Auth::user()->kode_cabang;
-      // $tahun = $request->tahun;
-      // // print    "{\"data\":[] }"; //output json andro
-      // // 
-      // $skac = new KoneksiController;
-      // $koneksi= $skac -> KoneksiDC();
-      // $kueri= "SELECT b.update_cabang,b.ccc_level,b.titel,b.name,b.alamat,SUM(a.total) AS totalbelanja,COUNT(a.nota) AS totalnota 
-      // FROM webapp.sales_nota_".$tahun." a,webapp.customers b 
-      // WHERE a.customer_id=b.id AND a.nota LIKE '".$cabang.".%' GROUP BY a.customer_id ";
-      // $result=$koneksi -> query($kueri);
-      // $count = $result->num_rows;
-      // if ($count>0) {
-      //   while ($row=$result->fetch_object()) {
-      //     $response[]=(object) array(
-      //       "cabang" => $row->update_cabang,
-      //       "ccc_level" => $row->ccc_level,
-      //       "titel" => $row->titel,
-      //       "name" => $row->name,
-      //       "alamat" => $row->alamat,
-      //       "totalnota" => $row->totalnota,
-      //       "totalbelanja" => $row->totalbelanja,
-      //       );
-      //   }$result->close();
-      // } else {
-      //   $response = [ ];
-      // }
-      // return Datatables::of($response)->make(true);
+      $tahun = $request->tahun;
+      $skac = new KoneksiController;
+      $koneksi= $skac -> KoneksiERPV1();
+      $kueri= "SELECT
+      p.no_nota, mtr.nama_perusahaan, d.subtotal, d.qty, d.diskon, p.tgl_tansaksi, pd.deskripsi, rtr.id_retur, p.id_customer, aa.id_member,
+      aa.nama_member
+    FROM
+      er_str_penjualan p
+      JOIN er_str_penjualan_detail d ON d.id_penjualan = p.id_penjualan
+      JOIN er_md_product pd ON pd.id_product = d.id_product
+      JOIN er_md_mitra mtr ON pd.nama_supplier = mtr.id_mitra
+      JOIN aauth_users users ON users.id = p.created_by
+      LEFT JOIN er_str_retur_penjualan rtr ON rtr.id_penjualan = d.id_penjualan 
+      join er_md_member aa on p.id_customer = aa.id_member
+      AND (
+        rtr.date_approved BETWEEN '".$tahun."-01-01 00:00:00' 
+        AND (
+        SELECT
+        LAST_DAY( '".$tahun."-01-01 23:59:00' ))) 
+    WHERE p.tgl_tansaksi BETWEEN '".$tahun."-01-01 23:59:00' 
+      AND  (
+        SELECT
+        LAST_DAY( '".$tahun."-01-01 23:59:00' ))
+    GROUP BY
+      d.id_penjualan_detail";
+      $result=$koneksi -> query($kueri);
+      $count = $result->num_rows;
+      if ($count>0) {
+        while ($row=$result->fetch_object()) {
+          $response[]=(object) array(
+            "no_nota"   	   => $row->no_nota,
+            "nama_perusahaan"=> $row->nama_perusahaan,
+            "nama_member"    => $row->nama_member,
+            "qty"            => $row->qty,
+            "diskon"         => $row->diskon,
+            "tgl_tansaksi"   => $row->tgl_tansaksi,
+            "deskripsi"      => $row->deskripsi,
+            "subtotal"       => $row->subtotal,
+            );
+        }$result->close();
+      } else {
+        $response = [ ];
+      }
+      return Datatables::of($response)->make(true);
     }
 
 

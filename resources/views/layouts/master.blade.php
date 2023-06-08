@@ -70,46 +70,30 @@
 <!-- bootstrap toogle -->
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <!--   <link rel="stylesheet" href="{{ URL::asset('bower_components/bootstrap-toggle-master/css/bootstrap-toggle.min.css') }}" > -->
-
-
 </head>
-
 <body>
-
     <!-- ======= Header ======= -->
     <header id="header" class="header fixed-top d-flex align-items-center">
-
         <div class="d-flex align-items-center justify-content-between">
-            <a href="index.html" class="logo d-flex align-items-center">
+            <a href="{{ URL::to('/') }}" class="logo d-flex align-items-center">
                 <img src="{{ URL::asset('new/assets/img/favicon.png') }}" width="30px" height="80px" alt="">
                 <span class="d-none d-lg-block">Sales CDI</span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
         </div><!-- End Logo -->
-
-
-
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
-
                 <li class="nav-item d-block d-lg-none">
                     <a class="nav-link nav-icon search-bar-toggle " href="#">
                         <i class="bi bi-search"></i>
                     </a>
                 </li><!-- End Search Icon-->
-
-
-
-
-
                 <li class="nav-item dropdown pe-3">
-
                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
                         data-bs-toggle="dropdown">
                         <img src="{{ URL::asset('dist/img/pincobra.png') }}" alt="Profile" class="rounded-circle">
                         <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->name }}</span>
                     </a><!-- End Profile Iamge Icon -->
-
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                         <li class="dropdown-header">
                             <h6>{{ Auth::user()->jabatan }}</h6>
@@ -129,11 +113,9 @@
                             <hr class="dropdown-divider">
                         </li>
 
-
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-
 
                         <li>
                             <hr class="dropdown-divider">
@@ -149,21 +131,13 @@
                                 style="display: none;">
                                 {{ csrf_field() }}
                             </form>
-
-
                             </a>
                         </li>
-
                     </ul><!-- End Profile Dropdown Items -->
                 </li><!-- End Profile Nav -->
-
             </ul>
         </nav><!-- End Icons Navigation -->
-
     </header><!-- End Header -->
-
-
-
 
     @if (Auth::user()->role_id == 3)
         @include('layouts/menuuser')
@@ -177,7 +151,6 @@
         @include('layouts/menucustomer')
     @endif
     <main id="main" class="main">
-
         <div class="pagetitle">
             <h1>@yield('minititle')</h1>
             {{-- <nav>
@@ -187,37 +160,22 @@
                 </ol>
             </nav> --}}
         </div><!-- End Page Title -->
-
         <section class="section dashboard">
             <div class="row">
-
                 <!-- Left side columns -->
-
-
                 @yield('content')
-
-
-
-
             </div><!-- End Right side columns -->
-
-
         </section>
         @include('layouts._modal')
-
     </main><!-- End #main -->
-
     <!-- ======= Footer ======= -->
     <footer id="footer" class="footer">
         <div class="copyright">
             &copy; Copyright <strong><span>PT.Cobra Dental Indonesia</span></strong>
         </div>
-
     </footer><!-- End Footer -->
-
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
-
     <!-- Vendor JS Files -->
     <script src="{{ URL::asset('new/assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
     <script src="{{ URL::asset('new/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -232,7 +190,6 @@
 
     <!-- Template Main JS File -->
     <script src="{{ URL::asset('new/assets/js/main.js') }}"></script>
-
 
     {{-- dri lamaa --}}
 
@@ -261,20 +218,19 @@
 <script src="{{ URL::asset('plugins/datatables/js/buttons.html5.min.js') }}"></script>
 <script src="{{ URL::asset('plugins/datatables/js/jszip.min.js') }}"></script>
 <script src="{{ URL::asset('plugins/datatables/js/dataTables.fixedColumns.min.js') }}"></script>
-
-   <!-- bootstrap-toggle-master -->
-   <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-   <!-- <script type="text/javascript"
-       src="{{ URL::asset('bower_components/bootstrap-toggle-master/js/bootstrap-toggle.min.js') }}"></script>   -->
-   <!-- Slimscroll -->
-   <script src="{{ URL::asset('bower_components/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
-   <!-- FastClick -->
-   <script src="{{ URL::asset('bower_components/fastclick/lib/fastclick.js') }}"></script>
-   <!-- AdminLTE App -->
-   <script src="{{ URL::asset('dist/js/adminlte.min.js') }}"></script>
-   <script src="{{ URL::asset('plugins/handlebars.js') }}"></script>
-    <!-- Toastr -->
-    <script src="{{ URL::asset('plugins/toastr/toastr.min.js') }}"></script>
+<!-- bootstrap-toggle-master -->
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<!-- <script type="text/javascript"
+    src="{{ URL::asset('bower_components/bootstrap-toggle-master/js/bootstrap-toggle.min.js') }}"></script>   -->
+<!-- Slimscroll -->
+<script src="{{ URL::asset('bower_components/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
+<!-- FastClick -->
+<script src="{{ URL::asset('bower_components/fastclick/lib/fastclick.js') }}"></script>
+<!-- AdminLTE App -->
+<script src="{{ URL::asset('dist/js/adminlte.min.js') }}"></script>
+<script src="{{ URL::asset('plugins/handlebars.js') }}"></script>
+<!-- Toastr -->
+<script src="{{ URL::asset('plugins/toastr/toastr.min.js') }}"></script>
 </body>
 @yield('page-script')
 

@@ -53,7 +53,7 @@
   var path = window.location.href;
    // because the 'href' property of the DOM element is the absolute path
   //  alert(window.location.host)
-  // console.log(path)
+  // console.log(window.location);
 
   $("a.nav-link").each(function() {
       if (this.href === path) {
@@ -63,6 +63,12 @@
       }
   });
 
+  if (window.location.pathname == '/sales_opti_new/public' || window.location.pathname == '/home/cdi' || window.location.pathname == '/') {
+    $('body').addClass("toggle-sidebar");
+  } else {
+    $('body').removeClass("toggle-sidebar");
+  }
+  
   /**
    * Navbar links active state on scroll
    */
