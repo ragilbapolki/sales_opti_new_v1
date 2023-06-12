@@ -59,17 +59,14 @@
                                     </div>
                                     <!-- /. tools -->
                                 </div>
-                                <div class="box-body table-bordered no-padding">
+                                <div class="box-body table-bordered no-padding" style="overflow: auto;"">
                                     <div class="col-xs-12">
-                                        <table id="custrank" class="display nowrap compact" cellspacing="0" width="100%">
+                                        <table id="custrank" class="display nowrap compact" cellspacing="0" width="120%">
                                             <thead>
                                                 <tr>
-                                                    <th>No Nota</th>
-                                                    <th>Cabang</th>
                                                     <th>Customer</th>
-                                                    <th>Produk</th>
-                                                    <th>Quantity</th>
-                                                    <th>Diskon</th>
+                                                    <th>Address</th>
+                                                    <th>Phone</th>
                                                     <th>Subtotal</th>
                                                 </tr>
                                             </thead>
@@ -101,10 +98,10 @@
 
     <script>
         $(document).ready(function() {
-            var tahun = document.getElementById("tahun").value;
+            var tahun = $("#tahun").val();
             var table = $('#custrank').DataTable({
-                scrollY: "533px",
-                scrollX: true,
+                // scrollY: "533px",
+                // scrollX: true,
                 scrollCollapse: true,
                 // paging: false,
                 columnDefs: [{
@@ -117,7 +114,7 @@
                 // bInfo: false,
                 select: true,
                 order: [
-                    [6, 'desc']
+                    [0, 'desc']
                 ],
                 "language": {
                     "emptyTable": "Data tidak ditemukan"
@@ -131,34 +128,22 @@
                     },
                     method: 'POST'
                 },
-                columns: [{
-                        data: 'no_nota',
-                        name: 'no_nota'
-                    },
-                    {
-                        data: 'nama_perusahaan',
-                        name: 'nama_perusahaan'
-                    },
+                columns: [
                     {
                         data: 'nama_member',
                         name: 'nama_member'
                     },
                     {
-                        data: 'deskripsi',
-                        name: 'deskripsi'
+                        data: 'alamat_detail',
+                        name: 'alamat_detail'
                     },
                     {
-                        data: 'qty',
-                        name: 'qty'
+                        data: 'no_kontak',
+                        name: 'no_kontak'
                     },
                     {
-                        data: 'diskon',
-                        name: 'diskon',
-                        "sClass": "text-right"
-                    },
-                    {
-                        data: 'subtotal',
-                        name: 'subtotal',
+                        data: 'sub_total',
+                        name: 'sub_total',
                         "render": $.fn.dataTable.render.number('.', ',', 0),
                         "sClass": "text-right"
                     }

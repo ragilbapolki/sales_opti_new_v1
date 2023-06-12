@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ErMdStrukturOrganisasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -37,7 +38,6 @@ class StokERPController extends Controller
     }
     public function page_listharga_erp()
     {
-
         $items = DB::connection('mysql_erp')->select('SELECT * FROM er_md_mitra');
 
         return view('listharga.index', compact('items'));
@@ -156,6 +156,7 @@ class StokERPController extends Controller
         $namabarang = $request->namabarang;
         $produsen = $request->produsen;
         $suplier = $request->suplier;
+        $data_cabang  = ErMdStrukturOrganisasi::where('kode_cabang',Auth::user()->kode_cabang)->first();
 
         if ($request->filled('kdbarang')) {
             $data = DB::connection('mysql_erp')->select('SELECT er_md_product.code, id_product, er_md_struktur_organisasi.kode_cabang AS kode, er_md_product.deskripsi, 
@@ -192,8 +193,21 @@ class StokERPController extends Controller
                     JOIN er_md_struktur_organisasi ON er_md_product.id_organisasi = er_md_struktur_organisasi.id_organisasi
                     WHERE er_md_product.nama_supplier ="' . $produsen . '" GROUP BY er_md_product.code');
         }
+            foreach ($data as $row) {
+                $result[]=(object) array(
+                    "code"   	            => $row->code,
+                    "id_product"            => $row->id_product,
+                    "kode"                  => $row->kode,
+                    "deskripsi"             => $row->deskripsi,
+                    "supplier"              => $row->supplier,
+                    "alias"                 => $row->alias,
+                    "kota"                  => $row->kota,
+                    "hrgppn"                => $data_cabang->price_category== 'jawa' ? $row->hrgppn : $row->hrgluarjawappn,
+                    "harga_per_satuan_jual" => $row->harga_per_satuan_jual,
+                );
+            }
 
-        return Datatables::of($data)->make(true);
+        return Datatables::of($result)->make(true);
     }
 
 

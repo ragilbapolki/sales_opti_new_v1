@@ -13,21 +13,10 @@
 										<th>Kode</th>
 										<th>Nama</th>
 										<th>Harga</th>
-										<th>Harga Luar Jawa</th>
 										<th>Suplier</th>
 										<th>stok</th>
 									</tr>
 								</thead>
-								<tfoot>
-									<tr>
-										<th>Kode</th>
-										<th>Nama</th>
-										<th>Harga</th>
-										<th>Harga Luar Jawa</th>
-										<th>Suplier</th>
-										<th>stok</th>
-									</tr>
-								</tfoot>
 							</table>
 						</div>
 					</div>

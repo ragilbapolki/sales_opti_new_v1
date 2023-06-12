@@ -358,13 +358,6 @@
                                             "sClass": "text-right"
                                         },
                                         {
-                                            data: 'hrgluarjawappn',
-                                            width: '20px',
-                                            "render": $.fn.dataTable.render.number('.',
-                                                ',', 0),
-                                            "sClass": "text-right"
-                                        },
-                                        {
                                             data: 'supplier',
                                             width: '400px'
                                         },

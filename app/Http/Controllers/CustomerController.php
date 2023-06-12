@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ErStrPenjualan;
 use Illuminate\Http\Request;
 use App\{Customer, User, Plan, Cekout}; //model tabel Customers
+use App\Models\ErMdStrukturOrganisasi;
 use App\WebsalesTmpTransaksi; //model tabel logs
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth; //untuk session auth
@@ -197,52 +198,32 @@ class CustomerController extends Controller
 
     public function tabel_show_custrank(Request $request)
     {
-      $cabang = Auth::user()->kode_cabang;
-      $tahun = $request->tahun;
-      $skac = new KoneksiController;
-      $koneksi= $skac -> KoneksiERPV1();
-      $kueri= "SELECT
-      p.no_nota, mtr.nama_perusahaan, d.subtotal, d.qty, d.diskon, p.tgl_tansaksi, pd.deskripsi, rtr.id_retur, p.id_customer, aa.id_member,
-      aa.nama_member
-    FROM
-      er_str_penjualan p
-      JOIN er_str_penjualan_detail d ON d.id_penjualan = p.id_penjualan
-      JOIN er_md_product pd ON pd.id_product = d.id_product
-      JOIN er_md_mitra mtr ON pd.nama_supplier = mtr.id_mitra
-      JOIN aauth_users users ON users.id = p.created_by
-      LEFT JOIN er_str_retur_penjualan rtr ON rtr.id_penjualan = d.id_penjualan 
-      join er_md_member aa on p.id_customer = aa.id_member
-      AND (
-        rtr.date_approved BETWEEN '".$tahun."-01-01 00:00:00' 
-        AND (
-        SELECT
-        LAST_DAY( '".$tahun."-01-01 23:59:00' ))) 
-    WHERE p.tgl_tansaksi BETWEEN '".$tahun."-01-01 23:59:00' 
-      AND  (
-        SELECT
-        LAST_DAY( '".$tahun."-01-01 23:59:00' ))
-    GROUP BY
-      d.id_penjualan_detail";
-      $result=$koneksi -> query($kueri);
-      $count = $result->num_rows;
-      if ($count>0) {
-        while ($row=$result->fetch_object()) {
-          $response[]=(object) array(
-            "no_nota"   	   => $row->no_nota,
-            "nama_perusahaan"=> $row->nama_perusahaan,
+      $data_cabang  = ErMdStrukturOrganisasi::where('kode_cabang',Auth::user()->kode_cabang)->first();
+      $day          = (int)date("d");           
+      $month        = (int)date("m");           
+      $current_date = date("Y-m-d");           
+      $previous_date= (((int)$request->tahun)-1).'-'.$month.'-'.$day;           
+      $records= ErStrPenjualan::selectRaw("sum(d.subtotal) as sub_total, alamat_detail, alamat, no_kontak,  aa.id_member, aa.nama_member")
+      ->JOIN("er_str_penjualan_detail as d","d.id_penjualan", "er_str_penjualan.id_penjualan")
+      ->JOIN("aauth_users as users","users.id", "er_str_penjualan.created_by")
+      ->LEFTJOIN("er_str_retur_penjualan as rtr","rtr.id_penjualan", "d.id_penjualan")
+      ->JOIN("er_md_member as aa","er_str_penjualan.id_customer", "aa.id_member")
+      ->JOIN("er_md_tim_sales as bb","er_str_penjualan.id_tim_sales", "bb.id_tim_sales")
+      ->where("id_organisasi_cabang", $data_cabang->id_organisasi)
+      ->whereBetween("rtr.date_approved", [$previous_date , $current_date])
+      ->whereBetween("er_str_penjualan.tgl_tansaksi", [$previous_date , $current_date])
+      ->groupBy('alamat_detail', 'alamat', 'no_kontak', 'aa.id_member', 'aa.nama_member')
+      ->get();
+
+      foreach ($records as $row) {
+        $response[]=(object) array(
+            "sub_total"   	 => $row->sub_total,
+            "alamat_detail"  => $row->alamat_detail,
             "nama_member"    => $row->nama_member,
-            "qty"            => $row->qty,
-            "diskon"         => $row->diskon,
-            "tgl_tansaksi"   => $row->tgl_tansaksi,
-            "deskripsi"      => $row->deskripsi,
-            "subtotal"       => $row->subtotal,
-            );
-        }$result->close();
-      } else {
-        $response = [ ];
+            "no_kontak"      => $row->no_kontak,
+          );
       }
       return Datatables::of($response)->make(true);
     }
-
 
 }
